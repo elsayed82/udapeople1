@@ -329,7 +329,7 @@ jobs:
             rm -rf node_modules
             npm install
             npm run build
-            aws s3 cp dist s3://udapeople-kk1j287dhjppmz43782 --recursive
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment
       - revert-migrations        
                     
@@ -350,15 +350,15 @@ jobs:
       - install_nodejs     
      
 
-      - run:
-          name: Package Backend
-          command: |
-            cd backend
-            npm run build
-            tar -czf artifact.tar.gz dist/* package*
+      # - run:
+      #     name: Package Backend
+      #     command: |
+      #       cd backend
+      #       npm run build
+      #       tar -czf artifact.tar.gz dist/* package*
 
-            cd ..
-            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files      
+      #       cd ..
+      #       cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files      
       - run:
           name: Deploy backend
           command: |
