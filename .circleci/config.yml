@@ -403,7 +403,7 @@ jobs:
             echo "${API_URL}"
             if curl -s $API_URL/api/status | grep "ok"
             then
-                exit 0
+                exit 2
             else
                 exit 1
             fi   
@@ -415,12 +415,12 @@ jobs:
             if curl -s $FRONTEND_WEBSITE | grep "Welcome"
             then
       
-              exit 0
+              exit 2
             else
               exit 1
              fi
-#       - destroy-environment
-#       - revert-migrations     
+      - destroy-environment
+      - revert-migrations     
 #       # Here's where you will add some code to rollback on failure  
 
 #   cloudfront-update:
