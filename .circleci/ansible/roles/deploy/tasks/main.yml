@@ -1,35 +1,37 @@
+# 
 ---
-- name: "Creates backend app directory"
-  file:
-    path: ~/backend-app
-    state: directory
-- name: "Unarchive backend files"
-  unarchive:
-    src: artifact.tar.gz
-    dest: ~/backend-app 
-# - name: "Installing Node Dependencies"
-#   shell: |
-#     cd ~/backend-app
-#     npm i
-# - name: "Executing Node app with PM2"
-#   shell: |
-#     cd ~/backend-app/dist
-#     # pm2 stop default
-#     # pm2 start main.js
-#      cd ../
-#      sudo apt install npm
-#      npm run build
-#      sudo npm install forever -g
-#      sudo npm install ts-node -g
-#      forever start -c "ts-node -r tsconfig-paths/register -r dotenv/config scr/main.ts" ./
+- name: "update apt"
+  become: true
+  apt:
+    update_cache: yes
 
-#   register: execute_node
+- name: "upgrade apt packages"
+  become: true
+  apt:
+    upgrade: "yes"
 
-# - name: print message
-#   debug:
-#     msg: "{{ execute_node.stdout_lines }}"           
-# - name: "Configure pm2 to start as service"
-#   become: true
-#   shell: |
-#     env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu
-       
+- name: "install dependencies."
+  become: true
+  apt:
+    name: ["nodejs", "npm"]
+    state: latest
+    update_cache: yes
+
+- name: "install n"
+  become: true
+  npm:
+    name: n
+    global: yes
+    production: yes
+
+- name: "install nodejs 12.20.1"
+  become: true
+  shell: n 12.20.1
+
+- name: "install pm2"
+  become: true
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
